@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>scroll</title>
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+      }
+      .content {
+        padding-left: 50px;
+        width: 50vw;
+        background-color: #fff;
+      }
+      .content div {
+        width: 100%;
+        height: 500px;
+        background-color: #ececec;
+      }
+      .content div:nth-child(2n) {
+        background-color: #fcfcfc;
+      }
+      .navs {
+        position: fixed;
+        padding: 0;
+        top: 80px;
+        right: 30vw;
+        background-color: #efefef;
+        cursor: pointer;
+      }
+      .navs li {
+        padding: 20px;
+        list-style: none;
+      }
+      .navs .active{
+        color: #66CCFF;
+        background-color: #e2e2e2;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="content">
+        <div id="c0">box-0</div>
+        <div id="c1">box-1</div>
+        <div id="c2">box-2</div>
+        <div id="c3">box-3</div>
+        <div id="c4">box-4</div>
+      </div>
+      <ul class="navs">
+        <li :class="{active: active === 0}" v-anchor="0">item-0</li>
+        <li :class="{active: active === 1}" v-anchor="1">item-1</li>
+        <li :class="{active: active === 2}" v-anchor="2">item-2</li>
+        <li :class="{active: active === 3}" v-anchor="3">item-3</li>
+        <li :class="{active: active === 4}" v-anchor="4">item-4</li>
+      </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          active: 0,
+          ids: ['c0', 'c1', 'c2', 'c3', 'c4'],
+          height: {}
+        },
+        mounted() {
+          window.addEventListener('scroll', this.onScroll)
+          this.$nextTick(() => {
+            this.ids.forEach(id => {
+              const idHeight = document.querySelector(`#${id}`).offsetTop
+              this.height[id] = idHeight
+            })
+          })
+        },
+        destroyed() {
+          window.removeEventListener('scroll', this.onScroll)
+        },
+        methods: {
+          onScroll(e) {
+            const top = document.documentElement.scrollTop
+            const clientHeight = document.documentElement.clientHeight
+            const scrollHeight = document.documentElement.scrollHeight
+            let active = ''
+            for (const key in this.height) {
+              const element = this.height[key]
+              if (top >= element) active = key
+            }
+            this.active = this.ids.findIndex(item => item === active)
+            // 判断是否滑动到底部了
+            if (scrollHeight > clientHeight && top + clientHeight === scrollHeight) {
+              this.active = this.ids.length - 1
+            }
+          }
+        },
+        directives: {
+          anchor: {
+            inserted: function(el, binding) {
+              el.onclick = function() {
+                const id = `#c${binding.value}`
+                const ele = document.querySelector(id)
+                let top = ele.offsetTop // 目标位置
+                let scrollHeight = document.documentElement.scrollTop // 滚动条当前距离
+                // document.documentElement.scrollTop = top
+                const STEP = 50
+                if (top < scrollHeight) {
+                  smoothUp()
+                } else {
+                  smoothDown()
+                }
+                function smoothUp() {
+                  if (top < scrollHeight) {
+                    if (scrollHeight - top >= STEP) {
+                      scrollHeight -= STEP
+                    } else {
+                      scrollHeight = top
+                    }
+                    document.documentElement.scrollTop = scrollHeight
+                    requestAnimationFrame(smoothUp)
+                  }
+                }
+                function smoothDown() {
+                  if (top > scrollHeight) {
+                    if (top - scrollHeight >= STEP) {
+                      scrollHeight += STEP
+                    } else {
+                      scrollHeight = top
+                    }
+                    document.documentElement.scrollTop = scrollHeight
+                    requestAnimationFrame(smoothDown)
+                  }
+                }
+              }
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

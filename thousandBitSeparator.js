@@ -1,4 +1,3 @@
-// 转千分位
 thousandBitSeparator (value) {
   return value && (
     value.toString().indexOf('.') !== -1 ?

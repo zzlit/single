@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>预览图片</title>
+    <link rel="stylesheet" href="https://unpkg.com/viewerjs/dist/viewer.css" crossorigin="anonymous">
+    <style>
+      .flex {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .qrcode-img {
+        width: 126px;
+        height: 126px;
+      }
+    </style>
+  <body>
+    <div class="flex">
+      <img src="./assets/WechatIMG13.jpeg" alt="qrcode" id="qrcode" class="qrcode-img">
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/viewerjs/dist/viewer.js" crossorigin="anonymous"></script>
+    <script src="./js/jquery-viewer.js"></script>
+    <script>
+      $(function () {
+        'use strict';
+        var $images = $('#qrcode');
+        var options = {
+          button: true,
+          navbar: false,
+          title: false,
+          toolbar: false,
+          movable: false,
+          zoomable: false,
+          rotatable: false,
+          scalable: false
+        }
+        $images.on().viewer(options);
+      });
+    </script>
+  </body>
+</html>

@@ -1,5 +1,11 @@
 <template>
   <view>
+    <view class="share-user flex-center">
+      <view class="user-avatar">
+        <image class="avatar" src="/static/icon/logo.png"></image>
+      </view>
+      <view class="chat-dialog"></view>
+    </view>
     <view class="area">
       <view class="box">
         <view class="up"></view>
@@ -49,7 +55,7 @@ export default {
 
 <style lang="scss" scoped>
 .area {
-  margin: 200px auto 0;
+  margin: 80px auto 0;
   width: 500px;
   overflow: hidden;
   .fill {
@@ -113,6 +119,37 @@ export default {
       .cards+.cards {
         margin-bottom: 20px;
       }
+    }
+  }
+}
+.share-user {
+  width: 100%;
+  height: 160px;
+  .user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    .avatar {
+      width: 100%;
+    }
+  }
+  .chat-dialog {
+    position: relative;
+    width: 500px;
+    height: 140px;
+    border-radius: 16px;
+    background-color: lightgreen;
+    margin-left: 40px;
+    &::after {
+      content: '';
+      position: absolute;
+      left: -40px;
+      top: 40px;
+      width: 0;
+      height: 0;
+      border: 20px solid transparent;
+      border-right: 20px solid lightgreen;
     }
   }
 }
